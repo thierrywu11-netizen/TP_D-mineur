@@ -33,3 +33,26 @@ int initialiser(Partie *p, int n) {
     }
   return 0;
 }
+
+int main(void) {
+    Partie p;
+
+    // Test avec une grille de 5x5
+    if (initialiser(&p, 5) != 0) {
+        printf("Erreur lors de l'initialisation.\n");
+        return 1;
+    }
+
+    printf("Grille initialisee avec succes !\n");
+    printf("Taille : %d x %d\n", p.n, p.n);
+
+    // Vérification des cellules
+    for (int l = 0; l < p.n; l++) {
+        for (int c = 0; c < p.n; c++) {
+            printf("[%d]", p.terrain[l][c].bombe);
+        }
+        printf("\n");
+    }
+
+    return 0;
+}
