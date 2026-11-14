@@ -19,3 +19,17 @@ typedef struct {
   int n; // nombre de lignes (et de colonnes) du terrain
   Cellule terrain[TAILLE_MAX][TAILLE_MAX];
 } Partie;
+
+// Question 3 : initialisation du terrain
+
+int initialiser(Partie *p, int n) {
+  if (n < 1 || n > TAILLE_MAX)
+    return 1;
+  p->n = n;
+  for (int l = 0; l < n; ++l)
+    for (int c = 0; c < n; ++c) {
+      p->terrain[l][c].masquee = 1;
+      p->terrain[l][c].bombe = 0;
+    }
+  return 0;
+}
