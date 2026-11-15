@@ -34,25 +34,42 @@ int initialiser(Partie *p, int n) {
   return 0;
 }
 
-int main(void) {
-    Partie p;
+// Question 4 : affichage du terrain
 
-    // Test avec une grille de 5x5
-    if (initialiser(&p, 5) != 0) {
-        printf("Erreur lors de l'initialisation.\n");
-        return 1;
+void afficher(const Partie *p, int montrerBombes) {
+  printf("   ");
+  for (int c = 0; c < p->n; ++c)
+    printf("%-*d", c >= 10 ? 3 : 2, c);
+  printf("\n");
+  for (int l = 0; l < p->n; ++l) {
+    printf("%2d ", l);
+    for (int c = 0; c < p->n; ++c) {
+      char car;
+      if (montrerBombes && p->terrain[l][c].bombe)
+        car = '*';
+      else if (p->terrain[l][c].masquee)
+        car = '.';
+      else
+        car = ' ';
+      printf("%-*c", c >= 10 ? 3 : 2, car);
     }
+    printf("\n");
+  }
+}
 
-    printf("Grille initialisee avec succes !\n");
-    printf("Taille : %d x %d\n", p.n, p.n);
 
-    // Vérification des cellules
-    for (int l = 0; l < p.n; l++) {
-        for (int c = 0; c < p.n; c++) {
-            printf("[%d]", p.terrain[l][c].bombe);
-        }
-        printf("\n");
-    }
 
-    return 0;
+int main() {
+  Partie p;
+  if (initialiser(&p, 5) != 0) {
+    printf("Erreur lors de l'initialisation.\n");
+    return 1;
+  }
+  afficher(&p, 0);
+
+  p.terrain[1][1].masquee = 0; // une cellule démasquée
+  p.terrain[3][2].bombe = 1;   // une bombe posée à la main
+  afficher(&p, 0);             // la bombe reste invisible
+  afficher(&p, 1);             // la bombe apparaît en '*'
+  return 0;
 }
