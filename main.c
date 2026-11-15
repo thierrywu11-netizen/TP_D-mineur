@@ -21,8 +21,19 @@ typedef struct {
 } Partie;
 
 // Question 3 : initialisation du terrain
+// question 5 : melanger le terrain
 
-int initialiser(Partie *p, int n) {
+void melanger(Partie *p) {
+  int n = p->n;
+  for (int i = n * n - 1; i >= 1; --i) {
+    int j = rand() % (i + 1); // j est compris entre 0 et i
+    Cellule tmp = p->terrain[i / n][i % n];
+    p->terrain[i / n][i % n] = p->terrain[j / n][j % n];
+    p->terrain[j / n][j % n] = tmp;
+  }
+}
+
+int initialiser(Partie *p, int n, int m) {
   if (n < 1 || n > TAILLE_MAX)
     return 1;
   p->n = n;
@@ -31,6 +42,7 @@ int initialiser(Partie *p, int n) {
       p->terrain[l][c].masquee = 1;
       p->terrain[l][c].bombe = 0;
     }
+    melanger(p);
   return 0;
 }
 
@@ -57,19 +69,17 @@ void afficher(const Partie *p, int montrerBombes) {
   }
 }
 
-
-
 int main() {
+  srand((unsigned int)time(NULL)); // sinon le mélange est toujours le même
   Partie p;
-  if (initialiser(&p, 5) != 0) {
+  if (initialiser(&p, 5, 6) != 0) {
     printf("Erreur lors de l'initialisation.\n");
     return 1;
   }
-  afficher(&p, 0);
+  afficher(&p, 0); // que des points
 
   p.terrain[1][1].masquee = 0; // une cellule démasquée
-  p.terrain[3][2].bombe = 1;   // une bombe posée à la main
-  afficher(&p, 0);             // la bombe reste invisible
-  afficher(&p, 1);             // la bombe apparaît en '*'
+  afficher(&p, 0);             // les bombes restent invisibles
+  afficher(&p, 1);             // les 6 bombes apparaissent en '*'
   return 0;
 }
